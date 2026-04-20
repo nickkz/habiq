@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HaBIQ – Pocono Mountains Real Estate</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+<!-- ── Topbar ────────────────────────────────────────────────────────────── -->
+<nav class="topbar">
+  <div class="topbar-brand">
+    <i class="fa-solid fa-house-chimney-window"></i>
+    <span>HaBIQ</span>
+    <small class="text-muted ms-2">Pocono Mountains · Multi-Family · &lt;$400K · No HOA</small>
+  </div>
+  <div class="topbar-stats" id="stats-bar">
+    <span class="stat-chip"><i class="fa fa-building"></i> <span id="stat-total">–</span> properties</span>
+    <span class="stat-chip"><i class="fa fa-user"></i> <span id="stat-owners">–</span> with owner</span>
+    <span class="stat-chip"><i class="fa fa-phone"></i> <span id="stat-phones">–</span> with phone</span>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn btn-sm btn-outline-light" onclick="triggerRefresh()">
+      <i class="fa fa-rotate me-1"></i>Refresh Data
+    </button>
+  </div>
+</nav>
+
+<!-- ── Main Layout ───────────────────────────────────────────────────────── -->
+<div class="app-body">
+
+  <!-- Sidebar: filters + property list -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span><i class="fa fa-sliders me-1"></i>Filters</span>
+      <span class="badge bg-primary rounded-pill" id="result-count">0</span>
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label">Price Range</label>
+      <div class="d-flex gap-2">
+        <input type="number" id="f-min-price" class="form-control form-control-sm"
+               placeholder="Min $" step="10000" />
+        <input type="number" id="f-max-price" class="form-control form-control-sm"
+               placeholder="Max $" value="400000" step="10000" />
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label">Min Beds</label>
+      <select id="f-beds" class="form-select form-select-sm">
+        <option value="">Any</option>
+        <option value="2">2+</option>
+        <option value="4">4+</option>
+        <option value="6">6+</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label">County</label>
+      <select id="f-county" class="form-select form-select-sm">
+        <option value="">All Counties</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label">Status</label>
+      <select id="f-status" class="form-select form-select-sm">
+        <option value="">All</option>
+        <option value="FOR_SALE">For Sale</option>
+        <option value="RECENTLY_SOLD">Recently Sold</option>
+      </select>
+    </div>
+
+    <button class="btn btn-primary btn-sm w-100 mt-2" onclick="applyFilters()">
+      <i class="fa fa-magnifying-glass me-1"></i>Apply Filters
+    </button>
+
+    <hr class="my-3" />
+
+    <div class="sidebar-header mb-2">
+      <span><i class="fa fa-list me-1"></i>Properties</span>
+    </div>
+    <div id="property-list" class="property-list"></div>
+  </aside>
+
+  <!-- Map -->
+  <div id="map"></div>
+
+  <!-- Detail Panel (slides in from right) -->
+  <div class="detail-panel" id="detail-panel">
+    <button class="detail-close" onclick="closeDetail()">
+      <i class="fa fa-xmark"></i>
+    </button>
+
+    <div id="detail-content">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+</div><!-- .app-body -->
+
+<!-- Toast notifications -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="toast" class="toast align-items-center text-bg-primary border-0" role="alert">
+    <div class="d-flex">
+      <div class="toast-body" id="toast-msg">Message</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto"
+              data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+<script>
+  // Pass server-side config to JS
+  window.HABIQ_CONFIG = {
+    mapLat: {{ map_lat }},
+    mapLng: {{ map_lng }},
+    mapZoom: {{ map_zoom }},
+  };
+  document.addEventListener("DOMContentLoaded", () => HaBIQ.init());
+</script>
+</body>
+</html>

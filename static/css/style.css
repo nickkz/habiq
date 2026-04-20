@@ -1,0 +1,379 @@
+/* ─── Reset & Base ──────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0f1117;
+  --surface:   #1a1d27;
+  --surface2:  #22263a;
+  --border:    #2e3349;
+  --accent:    #4f8ef7;
+  --accent2:   #38d9a9;
+  --danger:    #f26b6b;
+  --warn:      #f7c948;
+  --text:      #e2e8f0;
+  --muted:     #8892a4;
+  --topbar-h:  54px;
+  --sidebar-w: 300px;
+  --detail-w:  380px;
+}
+
+html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', system-ui, sans-serif; }
+body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; }
+
+/* ─── Topbar ────────────────────────────────────────────────────────────────── */
+.topbar {
+  height: var(--topbar-h);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  gap: 1.5rem;
+  flex-shrink: 0;
+  z-index: 1100;
+}
+
+.topbar-brand {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  white-space: nowrap;
+}
+
+.topbar-brand i { font-size: 1.3rem; }
+.topbar-brand small { font-size: .75rem; color: var(--muted); font-weight: 400; }
+
+.topbar-stats { display: flex; gap: .75rem; flex: 1; }
+
+.stat-chip {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: .2rem .75rem;
+  font-size: .78rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+}
+.stat-chip i { color: var(--accent); }
+.stat-chip span { color: var(--text); font-weight: 600; }
+
+.topbar-actions { margin-left: auto; }
+
+/* ─── Main Layout ───────────────────────────────────────────────────────────── */
+.app-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ─── Sidebar ───────────────────────────────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 1rem;
+  flex-shrink: 0;
+  z-index: 900;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: .85rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.filter-group { margin-top: .75rem; }
+.filter-label { font-size: .75rem; color: var(--muted); margin-bottom: .3rem; display: block; }
+
+.form-control, .form-select {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: .82rem;
+}
+.form-control:focus, .form-select:focus {
+  background: var(--surface2);
+  border-color: var(--accent);
+  color: var(--text);
+  box-shadow: 0 0 0 2px rgba(79,142,247,.2);
+}
+.form-control::placeholder { color: var(--muted); }
+.form-select option { background: var(--surface2); }
+
+/* ─── Property List ─────────────────────────────────────────────────────────── */
+.property-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: .5rem; }
+
+.prop-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: .6rem .75rem;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.prop-card:hover, .prop-card.active {
+  border-color: var(--accent);
+  background: #1f2640;
+}
+.prop-card-addr { font-size: .82rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.prop-card-city { font-size: .72rem; color: var(--muted); }
+.prop-card-row { display: flex; justify-content: space-between; align-items: center; margin-top: .3rem; }
+.prop-card-price { font-size: .9rem; font-weight: 700; color: var(--accent2); }
+.prop-card-meta { font-size: .7rem; color: var(--muted); }
+
+/* Price color chips */
+.price-low   { color: #38d9a9; }
+.price-mid   { color: #f7c948; }
+.price-high  { color: #f26b6b; }
+
+/* ─── Map ───────────────────────────────────────────────────────────────────── */
+#map {
+  flex: 1;
+  position: relative;
+  z-index: 800;
+}
+
+/* ─── Custom Leaflet Markers ────────────────────────────────────────────────── */
+.habiq-marker {
+  width: 30px; height: 30px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,.5);
+  cursor: pointer;
+}
+.habiq-marker.low   { background: #38d9a9; }
+.habiq-marker.mid   { background: #f7c948; }
+.habiq-marker.high  { background: #f26b6b; }
+.habiq-marker.selected { border-color: var(--accent); transform: rotate(-45deg) scale(1.2); }
+
+.leaflet-popup-content-wrapper {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+.leaflet-popup-tip { background: var(--surface); }
+.leaflet-popup-content { font-size: .82rem; margin: .5rem .75rem; }
+.popup-addr { font-weight: 700; font-size: .9rem; color: var(--accent); }
+.popup-city { color: var(--muted); font-size: .75rem; }
+.popup-price { font-size: 1rem; font-weight: 700; color: var(--accent2); margin: .3rem 0; }
+.popup-row { display: flex; gap: 1rem; color: var(--muted); font-size: .75rem; }
+
+/* ─── Detail Panel ──────────────────────────────────────────────────────────── */
+.detail-panel {
+  width: 0;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  overflow: hidden;
+  transition: width .25s ease;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 950;
+  overflow-y: auto;
+}
+.detail-panel.open { width: var(--detail-w); }
+
+.detail-close {
+  position: sticky;
+  top: .75rem;
+  float: right;
+  margin: .75rem .75rem 0 0;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 50%;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: .9rem;
+}
+.detail-close:hover { color: var(--text); border-color: var(--accent); }
+
+#detail-content { padding: 1rem 1rem 2rem 1rem; clear: both; }
+
+.detail-photo {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: .75rem;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted);
+  font-size: 2rem;
+}
+
+.detail-address { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: .2rem; }
+.detail-city    { font-size: .8rem; color: var(--muted); margin-bottom: .75rem; }
+.detail-price   { font-size: 1.4rem; font-weight: 800; color: var(--accent2); margin-bottom: .75rem; }
+
+.detail-chips   { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+.chip {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: .2rem .6rem;
+  font-size: .72rem;
+  color: var(--muted);
+  display: flex; align-items: center; gap: .3rem;
+}
+.chip i { color: var(--accent); font-size: .7rem; }
+.chip strong { color: var(--text); }
+
+.section-title {
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--muted);
+  margin: 1rem 0 .5rem;
+  display: flex; align-items: center; gap: .4rem;
+}
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Owner card */
+.owner-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: .75rem;
+}
+.owner-name { font-weight: 700; font-size: .9rem; margin-bottom: .4rem; }
+.owner-row  { display: flex; align-items: center; gap: .5rem; font-size: .78rem; color: var(--muted); margin: .2rem 0; }
+.owner-row i { width: 14px; text-align: center; color: var(--accent); }
+.owner-row a { color: var(--accent); text-decoration: none; }
+.owner-row a:hover { text-decoration: underline; }
+
+.badge-type {
+  font-size: .65rem;
+  padding: .15rem .5rem;
+  border-radius: 4px;
+  margin-left: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+/* Value row */
+.value-row {
+  display: flex;
+  justify-content: space-between;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: .6rem .75rem;
+  margin-bottom: .5rem;
+}
+.value-label { font-size: .75rem; color: var(--muted); }
+.value-num   { font-size: .9rem; font-weight: 700; color: var(--accent2); }
+
+/* Sale history table */
+.sale-table { width: 100%; font-size: .75rem; border-collapse: collapse; }
+.sale-table th {
+  text-align: left;
+  padding: .3rem .5rem;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+.sale-table td { padding: .3rem .5rem; border-bottom: 1px solid rgba(255,255,255,.03); }
+.sale-table tr:last-child td { border-bottom: none; }
+.sale-event-sold    { color: var(--accent2); font-weight: 600; }
+.sale-event-listed  { color: var(--accent); }
+.sale-event-change  { color: var(--warn); }
+
+/* Chart canvas */
+#price-chart { max-height: 160px; }
+
+/* Zillow link button */
+.btn-zillow {
+  background: #006aff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: .4rem .9rem;
+  font-size: .78rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: .4rem;
+  margin-top: .75rem;
+}
+.btn-zillow:hover { background: #0052cc; color: #fff; }
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--muted);
+  gap: .75rem;
+}
+.empty-state i { font-size: 2rem; color: var(--border); }
+.empty-state h6 { font-size: .85rem; color: var(--muted); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* Loader overlay */
+.map-loader {
+  position: absolute;
+  inset: 0;
+  background: rgba(15,17,23,.7);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1200;
+  font-size: 1.1rem;
+  color: var(--accent);
+  gap: .75rem;
+  pointer-events: none;
+  transition: opacity .3s;
+}
+.map-loader.hidden { opacity: 0; pointer-events: none; }
+
+/* Spinner */
+.spinner {
+  width: 20px; height: 20px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── Cluster customisation ─────────────────────────────────────────────────── */
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large { background: rgba(79,142,247,.2) !important; }
+.marker-cluster-small div,
+.marker-cluster-medium div,
+.marker-cluster-large div {
+  background: rgba(79,142,247,.7) !important;
+  color: #fff !important;
+  font-weight: 700;
+  font-size: .75rem;
+}
