@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a3a6b"/>
+      <stop offset="100%" stop-color="#0f2444"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4f8ef7"/>
+      <stop offset="100%" stop-color="#38d9a9"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="64" height="64" rx="12" fill="url(#bg)"/>
+  <!-- House outline -->
+  <path d="M32 10 L54 28 L54 54 L10 54 L10 28 Z" fill="none" stroke="url(#accent)" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Roof cap -->
+  <polygon points="32,8 56,29 52,29 32,13 12,29 8,29" fill="url(#accent)"/>
+  <!-- Door -->
+  <rect x="26" y="38" width="12" height="16" rx="6" fill="url(#accent)" opacity="0.9"/>
+  <!-- IQ letters -->
+  <text x="32" y="35" font-family="Arial Black,sans-serif" font-weight="900" font-size="14" fill="white" text-anchor="middle" letter-spacing="1">IQ</text>
+</svg>
