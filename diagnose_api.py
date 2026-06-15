@@ -38,7 +38,11 @@ else:
         body = ""
         try:
             data = resp.json()
-            count = len(data) if isinstance(data, list) else len(data.get("data", []))
+            count = len(data) if isinstance(
+                .
+
+
+            3-*data, list) else len(data.get("data", []))
             body = f"{count} listings returned"
         except Exception:
             body = fmt(resp.text)
